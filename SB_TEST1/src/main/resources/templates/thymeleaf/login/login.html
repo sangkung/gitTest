@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>login</title>
+ <link rel="icon" href="../../../img/favicon.ico" type="image/x-icon">
+<style>
+
+
+	/* div 정중앙 배치 */
+	#loginContainer{
+	  width:400px;
+	  height:300px;
+	  border: 1px solid black;
+	  position:absolute;
+	  top:50%;
+	  left:50%;
+	  padding:5px;
+	  margin:-200px 0px 0px -200px;
+	  text-align:center;
+	  background-color:lightblue;
+	}
+	/* margin:top botttom right left */
+
+
+</style>
+
+<script src="../../../js/jquery-3.7.1.min.js"></script>
+<script th:inline="javascript">
+// 타임리프 스크립트에서 파라미터 받는 방법
+/*<![CDATA[*/
+
+	//***********************************************************************
+	// onload 시 body 태그를 읽고난 후 실행될 스크립트 영역
+	//***********************************************************************
+	$(function(){
+
+		//------------------ 
+		// 스크립트에서 파라미터 받기 테스트
+		//------------------ 
+		var getSomeStr = /*[[${someStr}]]*/'';
+		//alert(getSomeStr);
+		
+		var userCookieYNCode = /*[[${userCookieYNCode}]]*/'';		
+		//alert(userCookieYNCode);      
+		//console.log(userCookieYNCode); 잘찍힘
+	
+		//alert( "해당 값 자료형 = " + typeof(userCookieYNCode)  );
+		
+		//------------------ 
+		// 쿠키값 존재유무를 체크하는 함수 
+		//------------------ 
+		//cookieCheck( userCookieYNCode );
+
+		
+		//------------------ 
+		// 세션만료 시 알림 (보류:sendirect 로 로그아웃시키는데 세션만료에대한 데이터를 넘길수가 없군 ㅇㅅㅇ)
+		//------------------ 
+		var msg = /*[[${msg}]]*/'';
+		
+		if( msg != null && msg != "" ){
+			alert( msg );
+			return;
+		}
+		
+		
+		
+		/* 
+		 * 함수설명: 로그인 시 비동기로 로그인 정보 가져오기 
+		 * @parameter :  
+		 * @return: Map 
+		*/
+		$("#loginBtn").click(function(){
+			
+			var id = $("#uid").val();
+			var pwd = $("#upwd").val();
+			
+			//alert( "id= " + id + "\npwd= " + pwd  );
+			
+			var loginFormObj = $("[name='loginFormCheck']").serialize();
+			
+			
+			// 비동기 
+			$.ajax({
+				type:"POST"		
+				,url:"/login.do"
+				,data:loginFormObj
+				,success:function( json ){
+					
+					var eCd       = json.resultCode; // 데이터 자료형은 살아서 잘 들어옴. alert( typeof(eCd) );
+					var eMsg      = json.resultMsg;
+					var cookieYn  = json.cookieYn;
+					var userNm    = json["USER_NM"];
+					var authTc    = json["AUTH_TC"];
+					var ingCondTc = json["ING_COND_TC"];
+					var ascnC     = json["ASCN_C"];
+					var brC       = json["BR_C"];
+
+					// 로그인 정보가 부적합할 시 
+					if( errorCheck(eCd) ){
+						alert(eMsg); 
+						cookieCheck( cookieYn );
+						return;
+					}
+					//
+					
+					// 로그인정보 담기
+					$("#userNm").val(userNm);
+					$("#authTc").val(authTc);
+					$("#ingCondTc").val(ingCondTc);
+					$("#ascnC").val(ascnC);
+					$("#brC").val(brC); 
+
+					// 홈으로 이동
+					$("#goHome").click();
+				}
+				,error:function(){
+					alert( "웹서버 연결 실패" ); return;
+				}
+			})
+			
+			
+		});
+		
+	
+	});
+	
+	
+	//***********************************************************************
+	// 사용자 함수 선언
+	//***********************************************************************
+	
+	//--------------
+	// 함수주석 양식
+	//--------------
+	/* 
+	 * 함수설명 : 
+	 * @parameter : 
+	 * @return : 
+	*/
+	
+
+	
+	
+
+	/* 
+	 * 함수설명 : 비동기 방식으로 웹서버에 접근 후 받는 파라미터 'errorCode' 값을 체크하는 함수.
+	 * @parameter : errorCode, errorMsg / errorCode == -1 이라면 에러!
+	 * @return : boolean
+	*/
+	function errorCheck(eCd){
+		 
+		 var rtnFlag = false; // 에러코드 -1 일 경우 true 
+		 eCd = parseInt(eCd,10);
+		 
+		 if( eCd < 0 ){
+			 rtnFlag = true;
+		 }
+		 
+		 return rtnFlag;
+	};
+	
+	/* 
+	 * 함수설명 : 로그인화면 요청 시 쿠키값 유무를 확인하는 함수 
+	 * @parameter : userCookieYNCode / 0 또는 1
+	 * @return : 
+	*/
+	function cookieCheck( userCookieYNCode ){
+		
+		//alert( "쿠키값 유무=" + userCookieYNCode );
+		 
+		// 쿠키값이 있는 경우 
+		if( userCookieYNCode == 1 ){
+			$("#upwd").val("");
+			$("#upwd").focus();
+			return;	
+		}
+		else{
+			$("#uid").val("");
+			$("#upwd").val("");
+			$("#uid").focus();
+			return;	
+		}
+		 
+	 }
+	
+	
+	
+	// 함수호출 테스트
+	function xxx(x){
+		var a = $("#uid").val() + x ;
+		alert( a + " 는 x맨!");
+	};
+
+	
+/*]]>*/	
+</script>
+</head>
+<body>
+
+		<!-- [해야할 리스트]
+		<ul id="list" style="font:20px;">
+			
+	      		 * 순서상관 x 는 목록태그 
+				 * li 태그 사용가능
+		 	
+			<li th:text="비동기"></li>
+			<li th:text="로그찍기"></li>
+			<li th:text="메뉴만들기"></li>
+		</ul> -->
+	
+		
+		<p></p>
+		
+		<ol>
+			<!-- 
+	      		 * 순번이 나오는 목록태그 
+				 * li 태그 사용가능
+		 	-->
+		</ol>
+		
+		<p></p>
+		
+		<dl>
+			<!-- 
+	      		 * 용어설명 태그  
+				 * li 태그 못씀 
+		 	-->
+		</dl>
+		
+
+	<div id="loginContainer">	
+		
+		<h1>[로그인]</h1>
+		
+		<p></p>
+		
+			
+			<!-- 로그인 (비동기) -->
+			<form name="loginFormCheck">
+	
+				<input type="text"     id="uid"      name="uid"  placeholder="아이디"  style="height: 20px;" th:value="${userId}"/> <br>
+				
+				<div style="height:3px;"></div>
+				
+				<input type="password" id="upwd"      name="upwd" placeholder="비밀번호" style="height: 20px;"/> <br>
+				
+				<div style="height:3px;"></div>
+				
+				<input type="checkbox" id="uid_save" name="uid_save" th:checked="${userCookieYNCode == 1 ? 'true' : 'false'}"/> 아이디 저장 &nbsp;	
+				<button id="loginBtn" type="button">로그인</button>	
+				
+			</form>
+
+	</div>
+
+	<br>
+	<span th:text="${sessionYn}"></span>	
+	
+	<!-- 홈화면 (동기) -->
+	<form name="goHomeForm" method="post" th:action="@{/home.do}">
+	
+		<input type="hidden" id="userNm"    name="userNm"/> <!-- 사용자명 -->
+		<input type="hidden" id="authTc"    name="authTc"/> <!-- 메뉴권한구분코드 -->
+		<input type="hidden" id="ingCondTc" name="ingCondTc"/> <!-- 조회구분코드 -->
+		<input type="hidden" id="ascnC"     name="ascnC"/> <!-- 조합코드 -->
+		<input type="hidden" id="brC"       name="brC"/> <!-- 점소코드 -->
+		<button id="goHome" type="submit" style="display:none;"></button>
+	
+	</form>
+
+</body>
+</html>

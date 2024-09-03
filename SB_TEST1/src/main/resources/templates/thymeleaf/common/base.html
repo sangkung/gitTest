@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko" 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+ <meta charset="UTF-8">
+ <!-- 부트스트랩 설정 
+ <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+ <title>base layout</title>
+ <!-- 부트스트랩 설정 -->
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+ <link rel="icon" href="../../../img/favicon.ico" type="image/x-icon">
+
+<style>
+	
+	
+	/******************************************************************************* 
+	  [ 기본 태그 설정 ]
+	*******************************************************************************/	
+	
+	/* 컨텐츠 길이에 상관없이 하단 고정	 */
+	footer {
+	    border-style: solid none; /* 줄그리기, 솔리드, 가로만 */
+	    border-width: 1px;        /* 쥴 귥기 */
+	    border-color: #2b3035;    /* 줄 색상 */
+	    background-color: #2b3035;
+	    color: white;
+	    height:2rem; 
+	    width: 100%;
+	    bottom: 0px;              /* 바닥을 0px 후에 */
+	    position: fixed;          /* 고정, 스크롤에 안따라댕김 */
+	}
+	
+	/* 버튼 태그들 들여쓰기 막기 : 가져온 헤드바에 한글은 세로로만 표현되서 추가함 */
+	button{
+		white-space:nowrap;
+		text-align:center;
+	}
+	
+	
+	table {
+		border-collapse: collapse;
+		width: 100%;
+	}
+	
+	th, td {
+		padding: 8px;		 /* 행 여백 */
+		white-space: nowrap; 
+	}
+	
+	/* a 태그 default 설정 시작 */
+	.chng-bg-color a{ 
+		text-decoration-line: none; 
+		color: black;
+	}
+	/* a 태그 default 설정 끝 */
+	
+	
+	/******************************************** 
+	  [ 사용자 태그 설정 ]
+	********************************************/	
+	
+	/* 메인 컨텐츠 여백세팅 시작 */
+	.mainStt {
+		padding-top: 100px;  /* 위 100여백 */
+		padding-left: 270px; /* 왼쪽 270여백 */
+		padding-right: 270px; /* 왼쪽 270여백 */
+		padding-bottom: 100px;  /* 아래 100여백 */
+ 	}
+	/* 메인 컨텐츠 여백세팅 끝 */
+
+	/* 사이드바 시작 */
+	.sideMenuBar {
+	    position: fixed;    /* 스크롤을 따라오도록 지정, 겹치려면 absolute */
+	    overflow: auto;     /*  div 스크롤 생성 */
+		border-style: solid;
+	    border-width: 1px;
+	    border-color: #2b3035;
+	    width: 250px;
+	    height: calc(100% - 100px); /* 70px(헤더바높이) + 30px(풋바높이) */
+	    top: 70px
+	}
+	/* 사이드바 끝 */
+	
+	
+	 
+	/* 메뉴명 들여쓰기 시작 */
+	.menuNmRow0 {
+		padding-left:10px;
+	} 
+	.menuNmRow1 {
+		padding-left:20px;
+	} 
+	.menuNmRow3 {
+		padding-left:30px;
+	} 
+	/* 메뉴명 들여쓰기 끝  */
+	
+
+	
+	/* 메뉴 list hover 이벤트로 색상주기 시작 */
+	.chng-bg-color:hover , .chng-bg-color a:hover{ /* span 등등 */
+		color: white;
+		background-color: #2b3035;
+	}
+
+	/* 메뉴 hover 이벤트로 색상주기 끝 */
+	
+	/* 메뉴 클릭 시 색상변경 시작 */
+	
+	/* 메뉴 클릭 시 색상변경 끝 */
+
+	
+</style>
+
+<script src="../../../js/jquery-3.7.1.min.js"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/	
+	
+	$(function(){
+
+		// 얘는 base.html 영역 벗, 홈화면은 스크립트 일단 안쓸거.
+	});
+
+
+/*]]>*/		
+</script>
+</head>
+
+	  <!-- 헤더 바 -->
+	  <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary" data-bs-theme="dark" >
+	  <div class="container-fluid">
+	    <a class="navbar-brand" id="goHome" th:href=@{/home.do}>
+	    	<img src="data:image/png;base64,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"
+	    	     style="width:50px; height:50px; cursor:pointer;"></img>
+	    </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    
+	    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+	        <li class="nav-item">
+	          <a class="nav-link disabled" aria-current="page">공지사항</a> <!-- class="nav-link active"  href 속성으로 이동 시 get 방식이다. -->
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" aria-current="page" href="/menu.do">메뉴</a>
+	        </li>
+	        <li class="nav-item dropdown">
+	          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	            연습실
+	          </a>
+	          <ul class="dropdown-menu">
+	            <li><a class="dropdown-item" th:href="@{/board.do}">게시판</a></li>
+	            <li><hr class="dropdown-divider"></li>
+	            <li><a class="dropdown-item" th:href="@{/fileUp.do}">파일 업로드</a></li>
+	            <li><a class="dropdown-item" th:href="@{/fileDown.do}">파일 다운로드</a></li>
+	          </ul>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link disabled" aria-disabled="true">미공개</a>
+	        </li>
+	      </ul>
+	      
+	      <!-- 검색 form [class="d-flex"] -->
+	      <form name="searchForm" class="d-flex" role="search">
+	        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+	        <button class="btn btn-outline-success" type="submit">검색</button>
+	      </form>
+	      
+	      &nbsp;
+	      
+	      <!-- 로그아웃 form -->
+	      <form class="logoutForm" name="logoutForm" th:action="@{/logout.do}">
+			<button class="btn btn-outline-danger" type="submit">로그아웃</button>
+	      </form>
+	    </div>
+	  </div>
+	  
+	  <!-- ■■■■■■■■■■■■■■■■■ 유저 정보 ■■■■■■■■■■■■■■■■■ 
+	  <div>
+	  	<input type="text" id="userNm"    th:value="${userInfoMap.userNm}"   >
+	  	<input type="text" id="authTc"    th:value="${userInfoMap.authTc}"   >
+	  	<input type="text" id="ingCondTc" th:value="${userInfoMap.ingCondTc}">
+	  	<input type="text" id="ascnC"     th:value="${userInfoMap.ascnC}"    >
+	  	<input type="text" id="brC"       th:value="${userInfoMap.brC}"      >
+	  </div>
+	  -->
+	</nav>
+
+<body class="d-flex flex-column min-vh-100"> <!-- footer 바 하단 고정 -->
+
+	<!-- 사이드바 
+	-->
+	<div class="sideMenuBar">
+	
+		<table>
+		
+			<thead>
+				<tr style="background-color:lightgray;">
+					<th >메뉴명</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr th:each="menu : ${menuList}" class="chng-bg-color">
+<!-- 					<td>
+						<input type="checkbox" />
+					</td> -->
+					<td th:class="menuNmRow + ${menu.MENU_LVL}">
+						<a th:if="${menu.MENU_FILE_NM2 != null}" 
+						   th:href="@{/{MENU_FILE_NM1}/{MENU_FILE_NM2}(MENU_FILE_NM1=${menu.MENU_FILE_NM1},MENU_FILE_NM2=${menu.MENU_FILE_NM2})}"
+						   th:text="${menu.MENU_NM}"></a>
+						<span th:unless="${menu.MENU_FILE_NM1 != null}" th:text="${menu.MENU_NM}"></span>   
+					</td>
+				</tr>
+			</tbody>
+		
+		</table>
+	
+	</div>
+
+	
+	
+	<!-- Content -->
+	<!-- base 에서 먹인 class="mainStt" 값이 모든 컨텐츠 화면들에서도 먹힌다. -->
+	<div layout:fragment="content" class="mainStt"> 
+		<h1>홈 페이지</h1>
+		<span th:text="${sessionYN}"></span>
+		<th:block>요</th:block>
+		<span th:text="${userInfo.USER_NM}"></span>
+
+	</div>
+
+	
+	<br>
+	<!-- Footer  class="py-5 mt-auto"(하단고정) -->
+	<footer>
+	
+		<p style="text-align:right; padding-right: 10px; top: 0px;">주식회사 - 유니타스</p>	
+	
+	</footer>
+
+
+	<!-- 부트스트랩 설정 -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+</body>
+</html>

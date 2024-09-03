@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<configuration scan="true" scanPeriod="60 seconds"><!-- 설정이 변경될 시 자동으로 변경된 설정을 60초 이내에 다시 로드한다. -->
+ 
+ 	<!-- 로그패턴 -->
+	<property name="CONSOLE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level  %cyan(%logger) - %msg%n"/>
+	<property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level  %logger - %msg%n"/>
+	
+	<!-- 로그파일명 -->
+	<property name="LOG_FILE_NAME" value="sb_test1_log" />
+	<property name="ERROR_FILE_NAME" value="sb_test1_error_log" />
+	<property name="DEBUG_FILE_NAME" value="sb_test1_debug_log" />
+
+	<!-- 로그파일경로 -->
+	<property name="LOG_PATH" value="/logs" />
+
+
+	<!-- 콘솔로그 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- 파일로그 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    	<file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        	<pattern>${FILE_LOG_PATTERN}</pattern>
+    	</encoder>
+  
+    	<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+    		<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+             <!-- 파일당 최고 용량 kb, mb, gb --> 
+    		<maxFileSize>50MB</maxFileSize>
+    		<!-- 일자별 로그파일 최대 보관주기(~일). 해당 설정일 이상된 파일은 자동으로 제거 -->
+    		<maxHistory>10</maxHistory>
+    		<!-- 아카이브내에 총 적재량을 설정. 여기서 말하는 아카이브는 어딘지 몰겠네ㅇㅅㅇ  -->
+    		<totalSizeCap>10GB</totalSizeCap>
+    	</rollingPolicy>
+    </appender>
+    
+    
+    <!-- 에러 파일로그 -->
+    <appender name="Error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        	<pattern>${FILE_LOG_PATTERN}</pattern>
+    	</encoder> 
+    	<!-- * 필터가 root 에 의해 안먹힌다고 해서 logger 태그에서 설정할 것임.
+    	     * 근데 root 에서 참조하지 않으면 해당 앱렌더는 적용이 안되던데 우야라는 거쥐?^^
+         -->
+    	<filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level> 
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch> 
+        </filter> 
+    	<file>${LOG_PATH}/${ERROR_FILE_NAME}.log</file>
+  	
+    	<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+    		<fileNamePattern>${LOG_PATH}/${ERROR_FILE_NAME}%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+             <!-- 파일당 최고 용량 kb, mb, gb --> 
+    		<maxFileSize>50MB</maxFileSize>
+    		<!-- 일자별 로그파일 최대 보관주기(~일). 해당 설정일 이상된 파일은 자동으로 제거 -->
+    		<maxHistory>30</maxHistory>
+    		<!-- 아카이브내에 총 적재량을 설정. 여기서 말하는 아카이브는 어딘지 몰겠네ㅇㅅㅇ  -->
+    		<totalSizeCap>10GB</totalSizeCap>
+    	</rollingPolicy>
+    </appender>
+    
+
+    <!-- 디버그 파일로그 -->
+    <appender name="Debug" class="ch.qos.logback.core.rolling.RollingFileAppender"> 
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        	<pattern>${FILE_LOG_PATTERN}</pattern>
+    	</encoder>
+    	
+    	<filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>Debug</level> 
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch> 
+        </filter>  
+    	<file>${LOG_PATH}/${DEBUG_FILE_NAME}.log</file>
+  
+    	<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+    		<fileNamePattern>${LOG_PATH}/${DEBUG_FILE_NAME}%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+             <!-- 파일당 최고 용량 kb, mb, gb --> 
+    		<maxFileSize>50MB</maxFileSize>
+    		<!-- 일자별 로그파일 최대 보관주기(~일). 해당 설정일 이상된 파일은 자동으로 제거 -->
+    		<maxHistory>30</maxHistory>
+    		<!-- 아카이브내에 총 적재량을 설정. 여기서 말하는 아카이브는 어딘지 몰겠네ㅇㅅㅇ  -->
+    		<totalSizeCap>10GB</totalSizeCap>
+    	</rollingPolicy>
+    </appender>
+    
+    <!-- 플젝파일은 로그레벨 'DEBUG' 가능 -->
+    <logger name="com.example.demo" level="DEBUG" additivity="false">
+    	<appender-ref ref="CONSOLE"/>
+    </logger>
+    
+    <!-- 
+    	* 에러파일로그 레벨 지정
+    	* 아래 디버그와는 다르게 info < error 이기 때문에 굳이 레벨을 달리 설정할 필요가 없다.
+    <logger name="com.example.demo" level="ERROR" additivity="false">
+    	<appender-ref ref="Error"/>
+    </logger>
+    -->
+    
+    <!-- 테스트 -->
+    <logger name="com.example.demo" level="DEBUG" additivity="false">
+    	<appender-ref ref="Debug"/>
+    </logger>
+    
+    
+    <!-- 프로그램전체 로그 레벨 'INFO' -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="Error" />
+        <appender-ref ref="Debug" />
+    </root>
+    
+</configuration>

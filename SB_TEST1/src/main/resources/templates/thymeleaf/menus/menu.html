@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" 
+ xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="/common/base"><!-- base.html 의 모든것을 해당 화면에 갖다붙이기 벗, layout:fragment="content" 이부분은 각 컨텐츠용 -->
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>메뉴</title>
+  <script>
+  /*<![CDATA[*/	
+	
+	$(function(){
+
+		var errorCode = /*[[${errorCode}]]*/''; 
+		var errorMsg = /*[[${errorMsg}]]*/''; 
+		
+		// 메뉴리스트 조회 시 예외가 발생한다면
+		if( errorCode < 0 ){ alert(errorMsg); return; }
+		
+	});
+
+
+  /*]]>*/	
+  </script>
+ 
+  </head>
+  <body>
+  
+	<!-- Content -->
+	<div layout:fragment="content">
+		
+		<!-- 단순 컨텐츠 문자열에서 파라미터를 보이고 싶을 때 -->
+	
+		<div style="text-align: center;">
+			<table id="menuTb" border="1">
+				<thead >
+					<tr>
+						<th>메뉴코드</th>
+						<th>상위메뉴코드</th>
+						<th>메뉴명</th>
+						<th>메뉴레벨</th>
+						<th>메뉴경로url</th>
+						<th>메뉴파일명</th>
+						<th>메뉴위치</th>
+						<th>순서번호</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<tr th:each="menu : ${menuList}">
+						<td th:text="${menu.ALM_MENU_C}"></td>
+						<td th:text="${menu.ALM_UP_MENU_C}"></td>
+						<td th:text="${menu.MENU_NM}"></td>
+						<td th:text="${menu.MENU_LVL}"></td>
+						<td th:text="${menu.MENU_PATH_URL}"></td> <!-- #strings.isEmpty(menu.MENU_PATH_URL) : 널 또는 '' 값이면 true 리턴 -->
+						<td th:text="${menu.MENU_FILE_NM2}"></td>
+						<td th:text="${menu.MENU_PLC_VAL}"></td>
+						<td th:text="${menu.ALM_MENU_SEQ}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+		<!-- 상대경로 라는데 구라같고 걍 [절대경로] 인듯 -->
+<!-- 		<div th:replace="~{menus/board :: fragment_test('메뉴: 내가 지정한 파라미터!','매개변수로 던지는건 나만보이나?')}"></div> -->
+		
+
+	</div><!--____________________Content 부분 끝 블럭____________________ --> 
+
+ 
+  </body>
+</html>

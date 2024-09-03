@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+
+	/* div 정중앙 배치 */
+	#errorBox{
+	  width:400px;
+	  height:300px;
+	  border: 1px solid black;
+	  position:absolute;
+	  top:50%;
+	  left:50%;
+	  padding:5px;
+	  margin:-200px 0px 0px -200px;
+	  text-align:center;
+	  background-color:lightblue;
+	}
+
+</style>
+
+<!-- 스크립트 -->
+<script>
+	
+	
+	
+</script>
+
+</head>
+<body>
+
+	<div id="errorBox">
+
+	<h1>404 에러 페이지</h1> 
+	<p>요청하신 페이지를 찾을 수 없슴다.</p>
+
+		<!-- 화면이동 버튼 : URL 링크 표현식 --> 
+	---> &nbsp;<a th:href="@{/}">[클릭]</a>
+	
+	</div>
+	
+
+	
+<!--
+	 인풋 
+	<input type="checkbox" id="human_YN" th:checked="false" />
+	<input type="text" id="text_ipt" th:text="|hello, boys!|" />
+	
+	 form 
+	<form name="test" ></form>
+	
+	 조건문 
+	<div th:with="apple=${'사과'}">
+		
+		<sapn th:if="${apple} == '사과'" th:text="${apple} + |는 |" ></sapn>
+		
+		<td th:switch="${apple}">
+			<span th:case="바나나">길다.</span>
+			<span th:case="사과">빨개요.</span>
+		</td>
+		
+		
+	</div>
+	
+	-->
+
+
+	
+	
+</body>
+</html>

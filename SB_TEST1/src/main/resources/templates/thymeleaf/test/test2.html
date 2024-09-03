@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Thymeleaf Test Page2</title>
+</head>
+<body>
+	
+	<!-- 
+		* 타임리프 문법은 ' th:~ ' 를 사용하여 코드를 작성함
+		
+			[th:속성 정리]
+		 		text : 에 입력된 값으로 글귀가 대체된다.
+		 		with : html 에서 변수를 세팅할 때 쓰인다.
+		 		utext : '<태그1>문자열</태그1>' 문자열에 태그가 있으면 빼준다.
+		 		
+	-->	
+	
+	<!-- 텍스트에 변수대입이 아닌 직접 문자입력 시 띄어쓰면 에러발생 
+	<h2 th:text="Te st">hello, Thymeleaf</h2> <에러>  -->
+	<h2 th:text="Test">hello, Thymeleaf</h2>
+
+	<div>
+		
+		<h3 th:if="${output1 != null and output1 != '' }" th:text="${output1}"></h3>
+		<h3 th:if="${output2 != null and output2 != '' }" th:utext="${output2}"></h3>
+		
+		
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.HomeMapper">
+
+	<select id="menuList" parameterType="java.util.Map" resultType="java.util.HashMap">
+		
+		SELECT 
+		       ALM_MENU_C
+		     , ALM_UP_MENU_C
+     		 , LPAD(' ', MENU_LVL * 3) || MENU_NM AS MENU_NM
+		     , MENU_LVL
+		     , MENU_PATH_URL
+		     , CASE 
+		        WHEN MENU_FILE_NM IS NOT NULL
+		        THEN SUBSTR(MENU_FILE_NM,1,7) || '.do'
+		       END                                AS MENU_FILE_NM2
+		     , CASE 
+		        WHEN MENU_FILE_NM IS NOT NULL
+		        THEN LOWER(SUBSTR(MENU_FILE_NM,1,7))
+		       END                                AS MENU_FILE_NM1
+		     , MENU_PLC_VAL
+		     , ALM_MENU_SEQ
+		     , USE_YN
+		  FROM
+		  (
+		    SELECT 
+		           B.ALM_MENU_C
+		         , B.ALM_UP_MENU_C
+		         , B.MENU_NM
+		         , B.MENU_LVL
+		         , B.MENU_PATH_URL
+		         , B.MENU_FILE_NM
+		         , B.MENU_PLC_VAL
+		         , B.ALM_MENU_SEQ
+		         , B.USE_YN
+		      FROM TSY_AUTH_MNG A
+		         , TSY_MENU_MNG B
+		     WHERE 1 = 1
+		       AND A.ALM_MENU_C = B.ALM_MENU_C
+		       AND A.AUTH_TC = #{AUTH_TC}
+ 		       AND B.USE_YN = 'Y'       
+		    ) 
+		  START WITH ALM_UP_MENU_C = '-'
+		  CONNECT BY PRIOR ALM_MENU_C = ALM_UP_MENU_C
+		  ORDER BY ALM_MENU_SEQ
+	
+	</select>
+
+</mapper>

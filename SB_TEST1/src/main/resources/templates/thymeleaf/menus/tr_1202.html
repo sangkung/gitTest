@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" 
+ xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="/common/base"><!-- base.html 의 모든것을 해당 화면에 갖다붙이기 벗, layout:fragment="content" 이부분은 각 컨텐츠용 -->
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>금리구간별 현황</title>
+  <script>
+  /*<![CDATA[*/	
+	
+	$(function(){
+
+		
+	});
+
+
+  /*]]>*/	
+  </script>
+ 
+  </head>
+  <body>
+  
+	<!-- Content -->
+	<div layout:fragment="content">
+		
+		<h1>금리구간별 현황</h1> <br><br>
+		
+		<div id="search_cond" >
+			<form name="tr_1202_cond">
+				<label>기준년월</label><input type="text" /><br>
+				<label>조합/중앙회</label><input type="text" /><br>
+				<label></label><input type="text" /><br>
+				<label></label><input type="checkbox" />&nbsp; 지소포함<br>
+				<label>분석레벨</label><input type="text" /><br>
+				<label>금액단위</label><input type="text" /><br>
+			</form>
+		</div>
+		--------------------------------------------------------------------그리드 만들기<br>
+		<div id="main-grd">
+		
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="list :${1202List}">
+						<td th:text="${list.BASE_DATE}"></td>
+					</tr>
+				</tbody>		
+			</table>
+		
+		</div>
+
+	</div><!--____________________Content 부분 끝 블럭____________________ --> 
+
+ 
+  </body>
+</html>

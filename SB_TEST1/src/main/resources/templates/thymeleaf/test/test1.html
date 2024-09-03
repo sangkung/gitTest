@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Thymeleaf Test Page</title>
+</head>
+<body>
+	
+	<!-- 
+		* 타임리프 문법은 ' th:~ ' 를 사용하여 코드를 작성함
+		
+			[th:속성 정리]
+		 		text : 에 입력된 값으로 글귀가 대체된다.
+		 		with : html 에서 변수를 세팅할 때 쓰인다.
+		 		
+	-->	
+	
+	<!-- 텍스트에 변수대입이 아닌 직접 문자입력 시 띄어쓰면 에러발생 
+	<h2 th:text="Te st">hello, Thymeleaf</h2> <에러>  -->
+	<h2 th:text="Test">hello, Thymeleaf</h2>
+
+	<div th:with="value1=${'타임리프'}, value2=${'반가워'}, value3=${'!^^'}"><!-- 대게 컨트롤러에서 넘어온 값을 받아 사용 -->
+		
+		<!-- 변수값 대입 -->
+		<h3 th:text="${value1}">내가...</h3>
+		<h3 th:text="${value2}">대체된다니</h3>
+		
+		<!-- if문, 삼항연산자 -->
+		<h3 th:if="${value2 == '반가워'}" th:text="${value3 != '!^^' ? '눈읏음은 사치다':'사치 페이커..?' }"></h3>
+		
+	</div>
+
+</body>
+</html>
